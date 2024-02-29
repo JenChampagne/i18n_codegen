@@ -321,7 +321,7 @@ fn gen_i18n_struct(translations: Translations, out: &mut TokenStream) {
 
             let args = placeholders.iter().map(|placeholder| {
                 let type_name = ident(&placeholder.to_string().to_camel_case());
-                quote! { #placeholder: #type_name<'_> }
+                quote! { #placeholder: #type_name<impl ::core::fmt::Display> }
             });
 
             let match_arms = translations.iter().map(|(locale_name, (translation, _))| {
@@ -371,7 +371,7 @@ fn gen_i18n_struct(translations: Translations, out: &mut TokenStream) {
         let placeholder = ident(&placeholder.to_string().to_camel_case());
         quote! {
             #[allow(missing_docs)]
-            pub struct #placeholder<'a>(pub &'a str);
+            pub struct #placeholder<T: ::core::fmt::Display>(pub T);
         }
     });
 
